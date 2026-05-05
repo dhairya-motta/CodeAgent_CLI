@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Scaler Academy — Become the Professional Built for the Next Decade in AI. AI-integrated curriculum, strong foundations, and lifelong learning access." />
+  <title>Scaler Academy — Become the Professional Built for the Next Decade in AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── CSS Variables ── */
+    :root {
+      --primary: #ff6b35;
+      --primary-dark: #e05520;
+      --primary-glow: rgba(255,107,53,0.25);
+      --navy: #0d1117;
+      --navy-light: #161b27;
+      --navy-card: #1c2333;
+      --navy-border: #2d3748;
+      --accent: #00d4aa;
+      --white: #ffffff;
+      --muted: #8b949e;
+      --text: #e6edf3;
+      --gradient: linear-gradient(135deg, #ff6b35 0%, #ff3d7f 100%);
+      --card-gradient: linear-gradient(145deg, #1c2333, #161b27);
+      --hero-gradient: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255,107,53,0.15) 0%, transparent 70%);
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 3px; }
+
+    /* ── Utility ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,107,53,0.12); border: 1px solid rgba(255,107,53,0.3);
+      color: var(--primary); font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 100px; letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.25s cubic-bezier(.4,0,.2,1);
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--gradient); color: #fff;
+      box-shadow: 0 4px 24px var(--primary-glow);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,107,53,0.4); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1.5px solid var(--navy-border);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 800;
+      line-height: 1.15; color: var(--white); margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.7;
+    }
+    .highlight { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ══════════════════════════════
+       HEADER / NAV
+    ══════════════════════════════ */
+    #header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(13,17,23,0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(45,55,72,0.6);
+      transition: background 0.3s;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px; gap: 32px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: #fff;
+    }
+    .logo-text { font-size: 22px; font-weight: 800; color: var(--white); }
+    .logo-text span { color: var(--primary); }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a {
+      padding: 8px 14px; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      transition: all 0.2s;
+    }
+    nav a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+    .nav-login { font-size: 14px; font-weight: 600; color: var(--muted); padding: 8px 14px; border-radius: 8px; transition: color 0.2s; }
+    .nav-login:hover { color: var(--white); }
+    .nav-enroll {
+      background: var(--gradient); color: #fff; font-size: 13px; font-weight: 700;
+      padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;
+      transition: all 0.25s; box-shadow: 0 2px 12px var(--primary-glow);
+    }
+    .nav-enroll:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,53,0.45); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+
+    /* ══════════════════════════════
+       HERO SECTION
+    ══════════════════════════════ */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: 68px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: var(--hero-gradient);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image: linear-gradient(var(--navy-border) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--navy-border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 500px; height: 500px; top: -100px; right: -100px;
+      background: rgba(255,107,53,0.12);
+    }
+    .hero-orb-2 {
+      width: 400px; height: 400px; bottom: 0; left: -100px;
+      background: rgba(0,212,170,0.08);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; padding: 80px 0;
+    }
+    .hero-badge-wrap { margin-bottom: 24px; }
+    .hero-heading {
+      font-size: clamp(32px, 5vw, 58px); font-weight: 900;
+      line-height: 1.08; color: var(--white); margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--muted); line-height: 1.7;
+      margin-bottom: 40px; max-width: 480px;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+    .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+    .stat-num {
+      font-size: 28px; font-weight: 800;
+      background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .stat-label { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+    .hero-right { position: relative; }
+    .hero-card-main {
+      background: var(--card-gradient);
+      border: 1px solid var(--navy-border);
+      border-radius: 20px; padding: 32px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      position: relative; overflow: hidden;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    .hero-card-glow {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--gradient);
+    }
+    .card-tag {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .card-tag::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .card-title { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
+    .card-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .card-features li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; color: var(--muted); font-weight: 500;
+    }
+    .card-features li span.icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255,107,53,0.12); display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .card-cta {
+      margin-top: 28px; width: 100%;
+      background: var(--gradient); color: #fff; font-size: 14px;
+      font-weight: 700; padding: 14px; border-radius: 10px;
+      border: none; cursor: pointer; transition: all 0.25s;
+    }
+    .card-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .floating-pill {
+      position: absolute; background: var(--navy-card);
+      border: 1px solid var(--navy-border); border-radius: 100px;
+      padding: 10px 18px; display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--white);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .pill-1 { top: -20px; right: -20px; animation: float2 5s ease-in-out infinite; }
+    .pill-2 { bottom: 30px; left: -30px; animation: float2 7s ease-in-out infinite 1s; }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .pill-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--gradient); display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: #fff; font-weight: 800;
+    }
+
+    /* ══════════════════════════════
+       TRUSTED BY BANNER
+    ══════════════════════════════ */
+    #trusted {
+      padding: 40px 0;
+      border-top: 1px solid var(--navy-border);
+      border-bottom: 1px solid var(--navy-border);
+      background: var(--navy-light);
+    }
+    .trusted-inner {
+      display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .trusted-label { font-size: 13px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+    .trusted-logos { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; justify-content: center; }
+    .company-logo {
+      font-size: 16px; font-weight: 700; color: var(--muted);
+      opacity: 0.5; transition: opacity 0.2s; letter-spacing: -0.02em;
+    }
+    .company-logo:hover { opacity: 1; color: var(--white); }
+
+    /* ══════════════════════════════
+       FEATURES SECTION
+    ══════════════════════════════ */
+    #features { padding: 100px 0; }
+    .features-header { text-align: center; margin-bottom: 64px; }
+    .features-header .section-sub { margin: 0 auto; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;
+    }
+    .feature-card {
+      background: var(--card-gradient);
+      border: 1px solid var(--navy-border);
+      border-radius: 16px; padding: 32px;
+      transition: all 0.3s; cursor: default;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,107,53,0.05), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); border-color: rgba(255,107,53,0.4); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(255,107,53,0.12); border: 1px solid rgba(255,107,53,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+    }
+    .feature-title { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    /* ══════════════════════════════
+       COURSES SECTION
+    ══════════════════════════════ */
+    #courses { padding: 100px 0; background: var(--navy-light); }
+    .courses-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 48px; flex-wrap: wrap; gap: 24px;
+    }
+    .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .course-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 16px; overflow: hidden;
+      transition: all 0.3s; cursor: pointer;
+    }
+    .course-card:hover { transform: translateY(-4px); border-color: rgba(255,107,53,0.35); box-shadow: 0 20px 48px rgba(0,0,0,0.3); }
+    .course-thumb {
+      height: 160px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center; font-size: 56px;
+    }
+    .course-thumb-1 { background: linear-gradient(135deg, #1a1f3e, #2d3059); }
+    .course-thumb-2 { background: linear-gradient(135deg, #1a2e1a, #1e3a1e); }
+    .course-thumb-3 { background: linear-gradient(135deg, #2e1a1a, #3a1e1e); }
+    .course-thumb-4 { background: linear-gradient(135deg, #1a2a2e, #1e313a); }
+    .course-thumb-5 { background: linear-gradient(135deg, #2a1a2e, #311e3a); }
+    .course-thumb-6 { background: linear-gradient(135deg, #2e2a1a, #3a311e); }
+    .course-body { padding: 24px; }
+    .course-meta { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      padding: 4px 10px; border-radius: 6px; text-transform: uppercase;
+    }
+    .tag-blue { background: rgba(88,166,255,0.12); color: #58a6ff; }
+    .tag-green { background: rgba(0,212,170,0.12); color: var(--accent); }
+    .tag-orange { background: rgba(255,107,53,0.12); color: var(--primary); }
+    .tag-purple { background: rgba(188,120,255,0.12); color: #bc78ff; }
+    .course-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; line-height: 1.35; }
+    .course-info { display: flex; gap: 16px; font-size: 13px; color: var(--muted); font-weight: 500; }
+
+    /* ══════════════════════════════
+       TESTIMONIALS
+    ══════════════════════════════ */
+    #testimonials { padding: 100px 0; }
+    .testi-header { text-align: center; margin-bottom: 64px; }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .testi-card {
+      background: var(--card-gradient); border: 1px solid var(--navy-border);
+      border-radius: 16px; padding: 28px; transition: all 0.3s;
+    }
+    .testi-card:hover { transform: translateY(-4px); border-color: rgba(255,107,53,0.3); }
+    .testi-stars { color: var(--primary); font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+    .testi-text { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gradient); display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .testi-name { font-size: 14px; font-weight: 700; color: var(--white); }
+    .testi-role { font-size: 12px; color: var(--muted); }
+    .testi-company { font-size: 12px; color: var(--primary); font-weight: 600; }
+
+    /* ══════════════════════════════
+       CTA BANNER
+    ══════════════════════════════ */
+    #cta-banner {
+      padding: 80px 0; background: var(--navy-light);
+      border-top: 1px solid var(--navy-border);
+    }
+    .cta-inner { text-align: center; max-width: 700px; margin: 0 auto; }
+    .cta-inner .section-title { margin-bottom: 20px; }
+    .cta-inner .section-sub { margin: 0 auto 40px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    #footer {
+      background: #0a0e16;
+      border-top: 1px solid var(--navy-border);
+      padding: 60px 0 0;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand .logo { margin-bottom: 16px; }
+    .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 280px; margin-bottom: 20px; }
+    .social-links { display: flex; gap: 10px; flex-wrap: wrap; }
+    .social-link {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--navy-card); border: 1px solid var(--navy-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--muted); transition: all 0.2s;
+      font-weight: 700;
+    }
+    .social-link:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,107,53,0.1); }
+    .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { font-size: 13px; color: var(--muted); transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom {
+      border-top: 1px solid var(--navy-border);
+      padding: 24px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 13px; color: var(--muted); }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { font-size: 13px; color: var(--muted); transition: color 0.2s; }
+    .footer-bottom-links a:hover { color: var(--primary); }
+
+    /* ══════════════════════════════
+       MOBILE NAV MENU
+    ══════════════════════════════ */
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(13,17,23,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 22px; font-weight: 700; color: var(--white); }
+    .mobile-close { position: absolute; top: 24px; right: 24px; font-size: 28px; cursor: pointer; color: var(--muted); background: none; border: none; }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      .hero-content { grid-template-columns: 1fr; gap: 48px; }
+      .hero-right { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 680px) {
+      nav, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-heading { font-size: 36px; }
+      .hero-stats { gap: 24px; }
+      .courses-header { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ══════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s cubic-bezier(.4,0,.2,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">x</button>
+    <a href="#features">Features</a>
+    <a href="#courses">Courses</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#footer">Resources</a>
+    <a href="#cta-banner" class="btn btn-primary">Apply Now</a>
+  </div>
+
+  <!-- HEADER -->
+  <header id="header" role="banner">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#hero" class="logo" aria-label="Scaler Academy Home">
+          <div class="logo-icon">S</div>
+          <span class="logo-text">Sc<span>a</span>ler</span>
+        </a>
+        <nav id="main-nav" aria-label="Main navigation">
+          <a href="#features">Features</a>
+          <a href="#courses">Courses</a>
+          <a href="#testimonials">Reviews</a>
+          <a href="#footer">Resources</a>
+          <a href="#footer">Blogs</a>
+          <a href="#footer">About</a>
+        </nav>
+        <div class="nav-cta">
+          <a class="nav-login" href="#hero">Login</a>
+          <button class="nav-enroll" id="nav-apply-btn">Apply Now</button>
+        </div>
+        <div class="hamburger" id="hamburger" aria-label="Open menu" role="button" tabindex="0">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="hero" role="main">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-badge-wrap fade-up">
+            <span class="badge">AI-First Learning Platform</span>
+          </div>
+          <h1 class="hero-heading fade-up delay-1">
+            Become the Professional <span class="highlight">Built for the Next Decade</span> in AI.
+          </h1>
+          <p class="hero-sub fade-up delay-2">
+            The investment that compounds. Scaler gives you strong technical foundations, AI integrated at every stage, and a curriculum that evolves as the market does.
+          </p>
+          <div class="hero-actions fade-up delay-3">
+            <a href="#courses" class="btn btn-primary" id="hero-explore-btn">Explore Courses</a>
+            <a href="#features" class="btn btn-outline">See How It Works</a>
+          </div>
+          <div class="hero-stats fade-up delay-4">
+            <div class="stat"><div class="stat-num">1 Lakh+</div><div class="stat-label">Students Placed</div></div>
+            <div class="stat"><div class="stat-num">900+</div><div class="stat-label">Hiring Partners</div></div>
+            <div class="stat"><div class="stat-num">4.8 Stars</div><div class="stat-label">Average Rating</div></div>
+          </div>
+        </div>
+        <div class="hero-right fade-up delay-2">
+          <div class="floating-pill pill-1">
+            <div class="pill-avatar">A</div>
+            <div>
+              <div style="font-size:12px;color:var(--accent);font-weight:700;">New Offer!</div>
+              <div style="font-size:11px;color:var(--muted);">42 LPA at Amazon SDE2</div>
+            </div>
+          </div>
+          <div class="hero-card-main">
+            <div class="hero-card-glow"></div>
+            <div class="card-tag">Modern Software &amp; AI Engineering</div>
+            <div class="card-title">Your path to AI-era engineering</div>
+            <ul class="card-features">
+              <li><span class="icon">robot</span>AI-Integrated Curriculum</li>
+              <li><span class="icon">book</span>500+ Hours of Live Content</li>
+              <li><span class="icon">star</span>Mentorship from Top Engineers</li>
+              <li><span class="icon">bag</span>Career Support Until Placed</li>
+              <li><span class="icon">inf</span>Lifelong Access to Updates</li>
+            </ul>
+            <button class="card-cta" id="card-apply-btn">Request a Callback</button>
+          </div>
+          <div class="floating-pill pill-2">
+            <div class="pill-avatar">K</div>
+            <div>
+              <div style="font-size:12px;color:#fff;font-weight:700;">Just joined Scaler</div>
+              <div style="font-size:11px;color:var(--muted);">Batch starting June 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUSTED BY -->
+  <section id="trusted" aria-label="Trusted by top companies">
+    <div class="container">
+      <div class="trusted-inner">
+        <span class="trusted-label">Our alumni work at</span>
+        <div class="trusted-logos">
+          <span class="company-logo">Google</span>
+          <span class="company-logo">Amazon</span>
+          <span class="company-logo">Microsoft</span>
+          <span class="company-logo">Meta</span>
+          <span class="company-logo">Flipkart</span>
+          <span class="company-logo">Goldman Sachs</span>
+          <span class="company-logo">Uber</span>
+          <span class="company-logo">Atlassian</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section id="features" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Why Scaler</div>
+        <h2 class="section-title" id="features-heading">Built Different, <span class="highlight">Designed to Last</span></h2>
+        <p class="section-sub">Not just another bootcamp. A system built around AI-era progress with everything you need to thrive.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">AI</div>
+          <div class="feature-title">AI-Integrated Curriculum</div>
+          <p class="feature-desc">Not retrofitted. Rebuilt from scratch with AI at every stage — tools, workflows, and thinking patterns for the AI era.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">DSA</div>
+          <div class="feature-title">Strong Foundations</div>
+          <p class="feature-desc">Rigorous DSA, system design, and engineering fundamentals that no amount of AI tooling can replace.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">Inf</div>
+          <div class="feature-title">Lifelong Learning Access</div>
+          <p class="feature-desc">The program ends. The access does not. Course materials update constantly so you never fall behind.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">Top</div>
+          <div class="feature-title">Elite Mentors</div>
+          <p class="feature-desc">Learn from engineers from FAANG, unicorns, and frontier AI labs who are still actively building the industry.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">Lab</div>
+          <div class="feature-title">Evaluated Practice</div>
+          <p class="feature-desc">Projects, AI labs, and tracked evaluations. You learn it, use it, and get graded on it in real hiring environments.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">Job</div>
+          <div class="feature-title">Career Support</div>
+          <p class="feature-desc">Mock interviews, referrals, 900+ hiring partners, and a community that is your professional network for a decade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COURSES SECTION -->
+  <section id="courses" aria-labelledby="courses-heading">
+    <div class="container">
+      <div class="courses-header">
+        <div class="reveal">
+          <div class="section-label">Programs</div>
+          <h2 class="section-title" id="courses-heading">Find the <span class="highlight">AI Path</span> for your role</h2>
+        </div>
+        <a href="#cta-banner" class="btn btn-outline reveal">View All Courses</a>
+      </div>
+      <div class="courses-grid">
+        <div class="course-card reveal" tabindex="0">
+          <div class="course-thumb course-thumb-1" style="font-size:40px;letter-spacing:2px;">SWE</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="tag tag-blue">Engineering</span><span class="tag tag-orange">Flagship</span></div>
+            <div class="course-name">Modern Software &amp; AI Engineering</div>
+            <div class="course-info"><span>12 months</span><span>2400+ Placed</span></div>
+          </div>
+        </div>
+        <div class="course-card reveal" tabindex="0">
+          <div class="course-thumb course-thumb-2" style="font-size:40px;letter-spacing:2px;">DS</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="tag tag-green">Data Science</span><span class="tag tag-orange">AI</span></div>
+            <div class="course-name">Modern Data Science &amp; ML with Specialisation in AI</div>
+            <div class="course-info"><span>10 months</span><span>900+ Placed</span></div>
+          </div>
+        </div>
+        <div class="course-card reveal" tabindex="0">
+          <div class="course-thumb course-thumb-3" style="font-size:40px;letter-spacing:2px;">OPS</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="tag tag-blue">DevOps</span><span class="tag tag-purple">Cloud</span></div>
+            <div class="course-name">DevOps, Cloud &amp; AI Platform Engineering</div>
+            <div class="course-info"><span>8 months</span><span>500+ Placed</span></div>
+          </div>
+        </div>
+        <div class="course-card reveal" tabindex="0">
+          <div class="course-thumb course-thumb-4" style="font-size:40px;letter-spacing:2px;">ML</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="tag tag-purple">Advanced AI</span><span class="tag tag-orange">AIML</span></div>
+            <div class="course-name">Advanced AI &amp; Machine Learning with Agentic AI</div>
+            <div class="course-info"><span>11 months</span><span>700+ Placed</span></div>
+          </div>
+        </div>
+        <div class="course-card reveal" tabindex="0">
+          <div class="course-thumb course-thumb-5" style="font-size:40px;letter-spacing:2px;">IIT</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="tag tag-blue">IIT Roorkee</span><span class="tag tag-green">CEC</span></div>
+            <div class="course-name">AI Engineering Advanced Certification by IIT-Roorkee CEC</div>
+            <div class="course-info"><span>9 months</span><span>IIT Certified</span></div>
+          </div>
+        </div>
+        <div class="course-card reveal" tabindex="0">
+          <div class="course-thumb course-thumb-6" style="font-size:40px;letter-spacing:2px;">MBA</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="tag tag-orange">Business</span><span class="tag tag-purple">PGP</span></div>
+            <div class="course-name">Online PGP in Business and AI</div>
+            <div class="course-info"><span>12 months</span><span>Executive Track</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" aria-labelledby="testi-heading">
+    <div class="container">
+      <div class="testi-header reveal">
+        <div class="section-label">Success Stories</div>
+        <h2 class="section-title" id="testi-heading">Real AI-era career moves, <span class="highlight">not generic success stories</span></h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <div class="testi-stars">* * * * *</div>
+          <p class="testi-text">"Scaler's AI-integrated curriculum was exactly what I needed. The mentors pushed me to think beyond LeetCode and understand systems at scale. Got my dream offer within 3 months of graduating."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div>
+              <div class="testi-name">Arjun Mehta</div>
+              <div class="testi-role">SDE-2 at <span class="testi-company">Google London</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="testi-stars">* * * * *</div>
+          <p class="testi-text">"I doubled my salary after Scaler. The curriculum was intense but the community and 1-on-1 mentorship made it worthwhile. The career support team was always there with mock interviews and referrals."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">P</div>
+            <div>
+              <div class="testi-name">Priya Sharma</div>
+              <div class="testi-role">Data Scientist at <span class="testi-company">Amazon AWS</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="testi-stars">* * * * *</div>
+          <p class="testi-text">"The Agentic AI specialisation was mind-blowing. I built production-ready AI agents and shipped them to real users. That portfolio landed me a role at one of India's fastest-growing startups."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <div class="testi-name">Rohan Kulkarni</div>
+              <div class="testi-role">Fresher at <span class="testi-company">Zepto (32 LPA)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section id="cta-banner">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <div class="section-label">Start Today</div>
+        <h2 class="section-title">Ready to build your <span class="highlight">AI-era career?</span></h2>
+        <p class="section-sub">Join 1 lakh+ professionals who chose Scaler. The next batch starts soon — secure your spot today.</p>
+        <div class="cta-actions">
+          <button class="btn btn-primary" id="cta-apply-btn">Apply Now — It's Free</button>
+          <button class="btn btn-outline" id="cta-call-btn">Talk to a Counsellor</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#hero" class="logo">
+            <div class="logo-icon">S</div>
+            <span class="logo-text">Sc<span>a</span>ler</span>
+          </a>
+          <p>InterviewBit Software Services Pvt. Ltd. 5th Floor, Surya Park II, Electronic City, Bengaluru, Karnataka 560100</p>
+          <div class="social-links">
+            <a href="https://www.youtube.com/@SCALER" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YT</a>
+            <a href="https://www.linkedin.com/school/scalerofficial" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
+            <a href="https://twitter.com/scaler_official" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">TW</a>
+            <a href="https://www.instagram.com/scaler_official/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
+            <a href="https://www.facebook.com/scalerofficial" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">FB</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explore Scaler</h4>
+          <ul>
+            <li><a href="https://scaler.com/academy/">Software &amp; AI Engineering</a></li>
+            <li><a href="https://scaler.com/data-science-course/">Data Science &amp; ML</a></li>
+            <li><a href="https://scaler.com/devops-course/">DevOps &amp; Cloud</a></li>
+            <li><a href="https://scaler.com/ai-machine-learning-course/">Advanced AIML</a></li>
+            <li><a href="https://scaler.com/neovarsity">Masters Programs</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://scaler.com/review/">Alumni Reviews</a></li>
+            <li><a href="https://scaler.com/blog/">Blogs</a></li>
+            <li><a href="https://www.scaler.com/topics/">Topics</a></li>
+            <li><a href="https://scaler.com/careers/">Careers</a></li>
+            <li><a href="https://scaler.com/contact/">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="https://scaler.com/about">About Us</a></li>
+            <li><a href="https://scaler.com/mentor">Become a Mentor</a></li>
+            <li><a href="https://scaler.com/enterprise">Hire From Us</a></li>
+            <li><a href="https://scaler.com/terms">Terms of Use</a></li>
+            <li><a href="https://scaler.com/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Trending</h4>
+          <ul>
+            <li><a href="https://www.scaler.com/courses/data-structures-and-algorithms/">DSA Course</a></li>
+            <li><a href="https://www.scaler.com/courses/system-design/">System Design</a></li>
+            <li><a href="https://www.scaler.com/courses/full-stack-developer/">Full Stack Dev</a></li>
+            <li><a href="https://www.scaler.com/courses/machine-learning-course-training/">ML Course</a></li>
+            <li><a href="https://www.scaler.com/courses/web-development/">Web Dev Course</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>2026 InterviewBit Software Services Pvt. Ltd. All Rights Reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="https://scaler.com/terms">Terms</a>
+          <a href="https://scaler.com/privacy">Privacy</a>
+          <a href="https://scaler.com/contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+    hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+    mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+    // Sticky header
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.style.background = window.scrollY > 10 ? 'rgba(13,17,23,0.98)' : 'rgba(13,17,23,0.85)';
+    }, { passive: true });
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Stagger grid children
+    document.querySelectorAll('.features-grid, .courses-grid, .testi-grid').forEach(grid => {
+      [...grid.children].forEach((child, i) => { child.style.transitionDelay = (i * 0.08) + 's'; });
+    });
+
+    // CTA scroll
+    ['nav-apply-btn','card-apply-btn','cta-apply-btn','cta-call-btn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('cta-banner').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
