@@ -423,7 +423,17 @@ h1{font-size:clamp(34px,4.5vw,56px);font-weight:900;line-height:1.08;color:var(-
 </html>`;
 
   fs.writeFileSync(filePath, html, "utf8");
-  return `Scaler Academy website cloned successfully! File saved to: ${filePath} (${html.length} bytes). Open it in your browser to view the result.`;
+
+  // Auto-open in browser
+  const absolutePath = path.resolve(filePath);
+  const openCmd = process.platform === "win32"
+    ? `start "" "${absolutePath}"`
+    : process.platform === "darwin"
+      ? `open "${absolutePath}"`
+      : `xdg-open "${absolutePath}"`;
+  exec(openCmd);
+
+  return `Scaler Academy website cloned successfully! File saved to: ${filePath} (${html.length} bytes). Opening in browser now...`;
 }
 
 const tool_map = {
