@@ -2,6 +2,8 @@
 
 A conversational CLI agent — similar to how Cursor or Windsurf work — where you can chat with the agent directly in the terminal. The agent reasons through tasks step-by-step, takes real actions (runs shell commands, writes files), and produces working output.
 
+> ⚡ Powered by **Groq** + **Llama 3.3 70B** — ultra-fast inference, free tier available.
+
 ---
 
 ## 🎯 What It Does
@@ -46,9 +48,10 @@ npm install
 ### 3. Set up your API key
 ```bash
 cp .env.example .env
-# Edit .env and add your OpenAI API key:
-# OPENAI_API_KEY=sk-...
+# Edit .env and add your Groq API key:
+# GROQ_API_KEY=gsk_...
 ```
+Get a free key at 👉 https://console.groq.com/keys
 
 ### 4. Run the agent
 ```bash
@@ -116,7 +119,7 @@ Color scheme: **Dark navy (#0d1117) + Orange (#ff6b35)** — matching Scaler bra
 ## 📦 Tech Stack
 
 - **Runtime**: Node.js (v18+)
-- **AI**: OpenAI GPT-4.1-mini
+- **AI**: Groq API — `llama-3.3-70b-versatile` (ultra-fast, free tier)
 - **HTTP**: Axios
 - **CLI**: Node built-in `readline`
 - **Env**: dotenv
@@ -136,7 +139,8 @@ Color scheme: **Dark navy (#0d1117) + Orange (#ff6b35)** — matching Scaler bra
 
 ## 🔑 Notes
 
-- Requires an OpenAI API key (GPT-4.1-mini is cost-efficient)
+- Requires a **Groq API key** (free at console.groq.com) — set as `GROQ_API_KEY` in `.env`
+- Uses `llama-3.3-70b-versatile` — Groq's fastest and most capable free model
 - The agent loops up to 50 iterations per task
 - All generated files are saved to `output/` directory
 

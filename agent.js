@@ -1,6 +1,6 @@
 import "dotenv/config";
 import axios from "axios";
-import { OpenAI } from "openai";
+import Groq from "groq-sdk";
 import { exec } from "child_process";
 import { createInterface } from "readline";
 import fs from "fs";
@@ -18,20 +18,19 @@ const c = {
   magenta: "\x1b[35m",
   red: "\x1b[31m",
   white: "\x1b[37m",
-  bgBlue: "\x1b[44m",
   bgGreen: "\x1b[42m",
 };
 
 function log(tag, color, content) {
-  const tag_str = `${color}${c.bold}[${tag}]${c.reset}`;
+  const tagStr = `${color}${c.bold}[${tag}]${c.reset}`;
   const lines = typeof content === "string" ? content : JSON.stringify(content, null, 2);
-  console.log(`\n${tag_str} ${c.dim}${lines}${c.reset}`);
+  console.log(`\n${tagStr} ${c.dim}${lines}${c.reset}`);
 }
 
 function printBanner() {
   console.log(`
 ${c.cyan}${c.bold}╔══════════════════════════════════════════════════════════╗
-║           🤖  CodeAgent CLI  —  AI Reasoning Loop        ║
+║        🤖  CodeAgent CLI  —  Powered by Groq + Llama     ║
 ║        Build. Think. Execute. Observe. Output.           ║
 ╚══════════════════════════════════════════════════════════╝${c.reset}
 ${c.dim}Type your instruction and press Enter. Type 'exit' to quit.${c.reset}
@@ -58,7 +57,7 @@ async function getGithubDetailsAboutUser(username = "") {
 }
 
 async function executeCommand(cmd = "") {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     exec(cmd, { maxBuffer: 1024 * 1024 * 10 }, (error, stdout, stderr) => {
       if (error) {
         resolve(`Error: ${error.message}\n${stderr}`);
@@ -70,7 +69,6 @@ async function executeCommand(cmd = "") {
 }
 
 async function writeFile(args) {
-  // args: "filepath|||content"
   const sep = args.indexOf("|||");
   if (sep === -1) return "Invalid args. Use: filepath|||content";
   const filePath = args.slice(0, sep).trim();
@@ -103,52 +101,52 @@ const tool_map = {
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `
 You are CodeAgent — an AI assistant that reasons step-by-step in a strict JSON loop.
-You ALWAYS use the format: { "step": "START|THINK|TOOL|OBSERVE|OUTPUT", "content": "...", "tool_name": "...", "tool_args": "..." }
+You ALWAYS respond with a single JSON object. Never output plain text.
+
+Output format (one object per response):
+{ "step": "START|THINK|TOOL|OBSERVE|OUTPUT", "content": "string", "tool_name": "string", "tool_args": "string" }
 
 Available Tools:
 1. getTheWeatherOfCity(cityname: string) — live weather for a city.
 2. getGithubDetailsAboutUser(username: string) — public GitHub profile info.
 3. executeCommand(cmd: string) — run any shell command on the user's machine.
-4. writeFile(args: string) — write content to a file. Format args as: "filepath|||file content here"
+4. writeFile(args: string) — write a file. Format: "filepath|||file content here"
 5. readFile(filepath: string) — read file content.
 6. createDirectory(path: string) — create a directory recursively.
 
 Rules:
-- ALWAYS output strict JSON. Never output plain text.
-- Do ONE step at a time and wait for OBSERVE before continuing.
-- Perform multiple THINK steps to break down complex problems.
-- Use TOOL to call tools. Immediately after a TOOL step you MUST wait for OBSERVE.
+- ALWAYS output a single valid JSON object. No markdown, no code fences, no extra text.
+- Do ONE step at a time. After every TOOL step, wait for OBSERVE.
+- Do multiple THINK steps to break down complex problems.
 - Use OUTPUT only when the full task is complete.
-- For writing HTML/CSS/JS websites: use writeFile tool multiple times.
-- For Scaler website cloning: create output/scaler/index.html with full HTML, CSS, JS inline or in separate files.
 
-JSON Format:
-{ "step": "START", "content": "description of what user wants" }
-{ "step": "THINK", "content": "reasoning thought" }
-{ "step": "TOOL", "content": "", "tool_name": "toolName", "tool_args": "arguments" }
-{ "step": "OUTPUT", "content": "final response to user" }
+For writing the Scaler website clone:
+- Path: output/scaler/index.html
+- Include: fixed HEADER with nav, HERO SECTION with headline and CTA, FEATURES, COURSES, FOOTER
+- Dark navy (#0d1117) + orange (#ff6b35) color scheme matching Scaler branding
+- All CSS in a <style> tag, all JS in a <script> tag
+- Fully responsive layout
 
-Scaler Website Cloning Guidelines (when asked):
-- Create output/scaler/index.html
-- Include a professional HEADER with Scaler logo (text-based), nav links: Courses, Topics, Blogs, Careers, About
-- Include a HERO SECTION with headline "Become the Professional Built for the Next Decade in AI", subtext, and a CTA button
-- Include FEATURES section showing 4 cards: AI-Integrated Curriculum, Strong Foundations, Lifelong Access, Career Support
-- Include COURSES section with at least 4 courses
-- Include FOOTER with links for Explore Scaler, Resources, Socials, copyright
-- Use a dark navy + orange color scheme matching Scaler branding (#1a1f36, #ff6b35, #ffffff)
-- Make it fully responsive and visually impressive
-- Write all CSS inline in a <style> tag and all JS in a <script> tag
+Example flow:
+user: What is the weather of Delhi?
+assistant: { "step": "START", "content": "User wants the current weather of Delhi" }
+assistant: { "step": "THINK", "content": "I have getTheWeatherOfCity tool available" }
+assistant: { "step": "TOOL", "content": "", "tool_name": "getTheWeatherOfCity", "tool_args": "Delhi" }
+developer: { "step": "OBSERVE", "content": "The Weather of Delhi is Partly cloudy +33C" }
+assistant: { "step": "THINK", "content": "Got the result, ready to respond" }
+assistant: { "step": "OUTPUT", "content": "Weather of Delhi is Partly cloudy +33C. Carry an umbrella!" }
 `;
 
 // ─── AGENT LOOP ───────────────────────────────────────────────────────────────
 async function runAgent(userInput) {
-  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === "your_openai_api_key_here") {
-    console.log(`\n${c.red}${c.bold}[ERROR]${c.reset} ${c.red}OPENAI_API_KEY is not set in .env file!${c.reset}`);
-    console.log(`${c.dim}Create a .env file with: OPENAI_API_KEY=sk-...${c.reset}\n`);
+  if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY === "your_groq_api_key_here") {
+    console.log(`\n${c.red}${c.bold}[ERROR]${c.reset} ${c.red}GROQ_API_KEY is not set in .env file!${c.reset}`);
+    console.log(`${c.dim}Create a .env file with: GROQ_API_KEY=gsk_...${c.reset}\n`);
     return;
   }
 
-  const client = new OpenAI();
+  const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
     { role: "user", content: userInput },
@@ -165,25 +163,41 @@ async function runAgent(userInput) {
     let response;
     try {
       response = await client.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: "llama-3.3-70b-versatile",
         messages,
         temperature: 0.2,
+        max_tokens: 8192,
       });
     } catch (err) {
-      log("ERROR", c.red, `OpenAI API error: ${err.message}`);
+      log("ERROR", c.red, `Groq API error: ${err.message}`);
       break;
     }
 
     const rawContent = response.choices[0].message.content.trim();
 
-    // Parse JSON (strip markdown fences if any)
+    // Strip markdown fences if model wraps JSON
     let parsed;
     try {
-      const clean = rawContent.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+      const clean = rawContent
+        .replace(/^```json\s*/i, "")
+        .replace(/^```\s*/i, "")
+        .replace(/```\s*$/i, "")
+        .trim();
       parsed = JSON.parse(clean);
     } catch {
-      log("ERROR", c.red, `Could not parse JSON: ${rawContent}`);
-      break;
+      // Try to extract JSON from the response
+      const match = rawContent.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          parsed = JSON.parse(match[0]);
+        } catch {
+          log("ERROR", c.red, `Could not parse JSON: ${rawContent.slice(0, 200)}`);
+          break;
+        }
+      } else {
+        log("ERROR", c.red, `No JSON found in response: ${rawContent.slice(0, 200)}`);
+        break;
+      }
     }
 
     messages.push({ role: "assistant", content: JSON.stringify(parsed) });
@@ -199,11 +213,12 @@ async function runAgent(userInput) {
         break;
 
       case "TOOL": {
-        log("TOOL", c.magenta, `Calling → ${parsed.tool_name}("${parsed.tool_args}")`);
+        log("TOOL", c.magenta, `Calling → ${parsed.tool_name}("${String(parsed.tool_args).slice(0, 80)}${String(parsed.tool_args).length > 80 ? "…" : ""}")`);
         const toolFn = tool_map[parsed.tool_name];
         let observeContent;
+
         if (!toolFn) {
-          observeContent = `Tool "${parsed.tool_name}" is not available.`;
+          observeContent = `Tool "${parsed.tool_name}" is not available. Available tools: ${Object.keys(tool_map).join(", ")}`;
           log("OBSERVE", c.red, observeContent);
         } else {
           try {
@@ -211,9 +226,7 @@ async function runAgent(userInput) {
             observeContent = result;
             const display =
               typeof result === "string"
-                ? result.length > 300
-                  ? result.slice(0, 300) + "…"
-                  : result
+                ? result.length > 300 ? result.slice(0, 300) + "…" : result
                 : JSON.stringify(result);
             log("OBSERVE", c.green, display);
           } catch (err) {
@@ -221,15 +234,15 @@ async function runAgent(userInput) {
             log("OBSERVE", c.red, observeContent);
           }
         }
+
         messages.push({
-          role: "developer",
+          role: "user",
           content: JSON.stringify({ step: "OBSERVE", content: observeContent }),
         });
         break;
       }
 
       case "OBSERVE":
-        // Model sometimes emits its own OBSERVE — just log it
         log("OBSERVE", c.green, parsed.content);
         break;
 
@@ -238,7 +251,7 @@ async function runAgent(userInput) {
         return;
 
       default:
-        log("UNKNOWN", c.red, rawContent);
+        log("UNKNOWN STEP", c.red, rawContent.slice(0, 200));
         break;
     }
   }
