@@ -618,6 +618,11 @@ async function main() {
   });
 
   const prompt = () => {
+    // Check if readline is still open
+    if (rl.closed) {
+      process.exit(0);
+    }
+    
     rl.question(`${c.cyan}${c.bold}You ▶ ${c.reset}`, async (input) => {
       const trimmed = input.trim();
       if (!trimmed) return prompt();
@@ -631,6 +636,11 @@ async function main() {
       prompt();
     });
   };
+
+  // Handle readline close gracefully
+  rl.on('close', () => {
+    process.exit(0);
+  });
 
   prompt();
 }
